@@ -7,6 +7,10 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
 
+/*
+ * Created by Ryan Miles on 3/20/2018.
+ */
+
 /**
  * The starting activity for [EntryListFragment] and sets up overhead UI
  */

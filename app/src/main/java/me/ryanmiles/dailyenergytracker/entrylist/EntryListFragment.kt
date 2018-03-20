@@ -7,6 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import me.ryanmiles.dailyenergytracker.R
 
+/*
+ * Created by Ryan Miles on 3/20/2018.
+ */
+
 /**
  * Display a list of [DailyEntry]s. Users can view all, edit, and add new new [DailyEntry]s
  */
