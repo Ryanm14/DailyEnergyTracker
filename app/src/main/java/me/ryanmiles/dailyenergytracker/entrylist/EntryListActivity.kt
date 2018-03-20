@@ -1,12 +1,15 @@
-package me.ryanmiles.dailyenergytracker
+package me.ryanmiles.dailyenergytracker.entrylist
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
+import me.ryanmiles.dailyenergytracker.R
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var entryListPresenter: EntryListPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
