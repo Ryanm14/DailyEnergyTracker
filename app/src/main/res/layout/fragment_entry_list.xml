@@ -24,6 +24,7 @@
             android:layout_marginRight="@dimen/list_item_padding"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:gravity="center_vertical"
+            android:text="@string/entries"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <android.support.v7.widget.RecyclerView

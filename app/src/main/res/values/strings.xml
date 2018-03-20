@@ -6,4 +6,5 @@
     <string name="no_entries_add">Add a new Entry +</string>
     <string name="no_entries_icon">No entries icon</string>
     <string name="loading_entries_error">Error Loading Entries</string>
+    <string name="entries">Entries:</string>
 </resources>
