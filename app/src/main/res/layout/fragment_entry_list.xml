@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.ryanmiles.dailyenergytracker.entrylist.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
+    tools:context="me.ryanmiles.dailyenergytracker.entrylist.EntryListActivity"
+    tools:showIn="@layout/activity_entry_list">
 
 </android.support.constraint.ConstraintLayout>
