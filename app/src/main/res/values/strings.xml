@@ -2,4 +2,9 @@
     <string name="app_name">Daily Energy Tracker</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="no_entries_all">You have no Entries!</string>
+    <string name="no_entries_add">Add a new Entry +</string>
+    <string name="no_entries_icon">No entries icon</string>
+    <string name="loading_entries_error">Error Loading Entries</string>
+    <string name="entries">Entries:</string>
 </resources>
