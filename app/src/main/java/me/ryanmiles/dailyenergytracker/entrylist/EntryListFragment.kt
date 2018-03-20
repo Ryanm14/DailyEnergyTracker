@@ -2,7 +2,9 @@ package me.ryanmiles.dailyenergytracker.entrylist
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +12,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
 import me.ryanmiles.dailyenergytracker.data.model.DailyEntry
+import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
 
 /*
@@ -24,6 +28,9 @@ import java.util.*
 class EntryListFragment : Fragment(), EntryListContract.View {
 
     override lateinit var presenter: EntryListContract.Presenter
+
+    override var isActive: Boolean = false
+        get() = isAdded
 
     private lateinit var noEntriesView: View
     private lateinit var noEntryIcon: ImageView
@@ -42,14 +49,17 @@ class EntryListFragment : Fragment(), EntryListContract.View {
     }
 
 
-    private val listAdapter = EntryListAdapter(ArrayList(0), itemListener)
+    private val recyclerViewAdapter = EntryListAdapter(ArrayList(0), itemListener)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_entry_list, container, false)
 
         with(root) {
-            val listView = findViewById<RecyclerView>(R.id.entries_recycler_view).apply { adapter = listAdapter }
+            val recyclerView = findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = recyclerViewAdapter
+            }
 
             entriesLabelView = findViewById(R.id.entriesLabel)
             entriesView = findViewById(R.id.entriesLinearLayout)
@@ -78,9 +88,26 @@ class EntryListFragment : Fragment(), EntryListContract.View {
     }
 
     override fun showEntries(entries: List<DailyEntry>) {
-        listAdapter.entries = entries
+        recyclerViewAdapter.entries = entries
         entriesView.visibility = View.VISIBLE
         noEntriesView.visibility = View.GONE
+    }
+
+    override fun showNoEntries() {
+        entriesView.visibility = View.GONE
+        noEntriesView.visibility = View.VISIBLE
+
+        noEntriesMain.text = resources.getString(R.string.no_entries_all)
+        noEntriesIcon.setImageResource(R.drawable.ic_assignment_turned_in_24dp)
+        noEntriesAdd.visibility = View.GONE
+    }
+
+    override fun showLoadingTasksError() {
+        showMessage(getString(R.string.loading_entries_error))
+    }
+
+    private fun showMessage(message: String) {
+        view?.showSnackBar(message, Snackbar.LENGTH_LONG)
     }
 
     override fun showAddEntry() {

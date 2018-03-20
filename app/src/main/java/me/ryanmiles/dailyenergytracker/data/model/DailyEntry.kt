@@ -14,7 +14,7 @@ open class DailyEntry(
 
         @PrimaryKey var id: String = UUID.randomUUID().toString(),
 
-        var date: Date = Date(),
+        var date: String = "",
 
         var note: String = "",
 
@@ -23,6 +23,6 @@ open class DailyEntry(
     : RealmObject(), Comparable<DailyEntry> {
 
     override fun compareTo(other: DailyEntry): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return id.compareTo(other.id)
     }
 }

@@ -16,15 +16,25 @@ interface EntryListContract {
     /** EntryList implementation of the [BaseView] **/
     interface View : BaseView<Presenter> {
 
+        var isActive: Boolean
+
         fun showEntries(entries: List<DailyEntry>)
 
         fun showAddEntry()
 
         fun showEntryDetailsUi(entryId: String)
+
+        fun showNoEntries()
+
+        fun showLoadingTasksError()
     }
 
     /** EntryList implementation of the [BasePresenter] **/
-    interface Presenter : BasePresenter
+    interface Presenter : BasePresenter {
+        fun loadEntriesFromStart(forceUpdate: Boolean)
+        fun openEntryDetails(requestEntry: DailyEntry)
+        fun addNewEntry()
+    }
 
 
 }

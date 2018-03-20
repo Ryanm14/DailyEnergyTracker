@@ -16,8 +16,8 @@ class EntryListAdapter(entries: List<DailyEntry>, private val itemListener: Entr
     : RecyclerView.Adapter<EntryListAdapter.ViewHolder>() {
 
     var entries: List<DailyEntry> = entries
-        set(tasks) {
-            field = tasks
+        set(entries) {
+            field = entries
             notifyDataSetChanged()
         }
 
@@ -27,15 +27,15 @@ class EntryListAdapter(entries: List<DailyEntry>, private val itemListener: Entr
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindImage(entries[position])
+        holder.bindEntry(entries[position])
     }
 
     override fun getItemCount(): Int = entries.size
 
     class ViewHolder(val view: View, private val itemListener: EntryItemListener) : RecyclerView.ViewHolder(view) {
 
-        fun bindImage(entry: DailyEntry) {
-            itemView.title.text = entry.toString()
+        fun bindEntry(entry: DailyEntry) {
+            itemView.title.text = entry.date
             itemView.setOnClickListener { itemListener.onEntryClick(entry) }
         }
     }
