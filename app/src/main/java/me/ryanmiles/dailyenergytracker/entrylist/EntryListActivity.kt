@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.ryanmiles.dailyenergytracker.R
 
-class MainActivity : AppCompatActivity() {
+class EntryListActivity : AppCompatActivity() {
 
     private lateinit var entryListPresenter: EntryListPresenter
 

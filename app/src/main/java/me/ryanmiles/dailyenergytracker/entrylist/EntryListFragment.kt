@@ -10,7 +10,7 @@ import me.ryanmiles.dailyenergytracker.R
 /**
  * A placeholder fragment containing a simple view.
  */
-class MainActivityFragment : Fragment(), EntryListContract.View {
+class EntryListFragment : Fragment(), EntryListContract.View {
 
     override lateinit var presenter: EntryListContract.Presenter
 
