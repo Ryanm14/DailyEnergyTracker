@@ -1,11 +1,12 @@
 package me.ryanmiles.dailyenergytracker.entrylist
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
+import me.ryanmiles.dailyenergytracker.data.cache.EntryRepository
+import me.ryanmiles.dailyenergytracker.util.replaceFragmentInActivity
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -23,10 +24,14 @@ class EntryListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_entry_list)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        val entryListFragment = supportFragmentManager.findFragmentById(R.id.contentFrame)
+                as EntryListFragment? ?: EntryListFragment.newInstance().also {
+            replaceFragmentInActivity(it, R.id.contentFrame)
         }
+
+        // Create the presenter
+        entryListPresenter = EntryListPresenter(EntryRepository(), entryListFragment)
     }
+
 
 }
