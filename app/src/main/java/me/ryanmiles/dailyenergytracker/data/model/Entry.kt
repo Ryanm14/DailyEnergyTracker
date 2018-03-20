@@ -3,7 +3,7 @@ package me.ryanmiles.dailyenergytracker.data.model
 import io.realm.RealmObject
 import java.util.*
 
-/**
+/*
  * Created by Ryan Miles on 3/20/2018.
  */
 data class Entry(val id: UUID,

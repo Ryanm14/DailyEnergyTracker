@@ -4,7 +4,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import java.util.*
 
-/**
+/*
  * Created by Ryan Miles on 3/20/2018.
  */
 data class DailyEntry(
