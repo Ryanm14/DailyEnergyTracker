@@ -3,7 +3,7 @@ package me.ryanmiles.dailyenergytracker
 import android.app.Application
 import io.realm.Realm
 
-/**
+/*
  * Created by Ryan Miles on 3/20/2018.
  */
 

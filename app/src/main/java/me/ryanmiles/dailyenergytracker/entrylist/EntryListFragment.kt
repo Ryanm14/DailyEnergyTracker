@@ -27,4 +27,9 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         super.onResume()
         presenter.start()
     }
+
+    companion object {
+
+        fun newInstance() = EntryListFragment()
+    }
 }
