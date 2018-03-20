@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import me.ryanmiles.dailyenergytracker.R
 
 /**
- * A placeholder fragment containing a simple view.
+ * Display a list of [DailyEntry]s. Users can view all, edit, and add new new [DailyEntry]s
  */
 class EntryListFragment : Fragment(), EntryListContract.View {
 

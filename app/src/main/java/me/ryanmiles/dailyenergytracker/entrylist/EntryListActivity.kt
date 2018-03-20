@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
 
+/**
+ * The starting activity for [EntryListFragment] and sets up overhead UI
+ */
 class EntryListActivity : AppCompatActivity() {
 
     private lateinit var entryListPresenter: EntryListPresenter
