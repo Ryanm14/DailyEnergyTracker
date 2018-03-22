@@ -1,10 +1,13 @@
 language: android
+jdk: oraclejdk8
+sudo: required
 
-jdk:
- - oraclejdk8
+before_cache:
+ - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 
-before_install:
- - chmod +x gradlew
+cache:
+  directories:
+  - $HOME/.gradle
 
 android:
   components:
@@ -21,19 +24,12 @@ licenses:
   - 'google-gdk-license-.+'
   - '.+'
 
+before_install:
+ - chmod +x gradlew
+
 script:
   - ./gradlew clean check -Dpre-dex=false
-
-
 
 notifications:
   email: false
 
-sudo: false
-
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-
-cache:
-  directories:
-    - $HOME/.gradle
