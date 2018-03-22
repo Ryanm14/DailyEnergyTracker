@@ -38,7 +38,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
      */
     private fun loadEntries(forceUpdate: Boolean) {
         if (forceUpdate) {
-            entryRepository.refreshTasks()
+            entryRepository.refreshEntries()
         }
 
         // The network request might be handled in a different thread so make sure Espresso knows
