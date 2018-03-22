@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
 import me.ryanmiles.dailyenergytracker.data.cache.EntryRepository
+import me.ryanmiles.dailyenergytracker.data.source.RealmDataSource
 import me.ryanmiles.dailyenergytracker.util.replaceFragmentInActivity
 
 /*
@@ -30,7 +31,8 @@ class EntryListActivity : AppCompatActivity() {
         }
 
         // Create the presenter
-        entryListPresenter = EntryListPresenter(EntryRepository(), entryListFragment)
+        entryListPresenter = EntryListPresenter(EntryRepository.getInstance(
+                RealmDataSource.getInstance()), entryListFragment)
     }
 
 
