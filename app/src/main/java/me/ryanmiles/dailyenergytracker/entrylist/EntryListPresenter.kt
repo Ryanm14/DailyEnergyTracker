@@ -2,7 +2,7 @@ package me.ryanmiles.dailyenergytracker.entrylist
 
 import me.ryanmiles.dailyenergytracker.data.cache.EntryRepository
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
-import me.ryanmiles.dailyenergytracker.data.model.DailyEntry
+import me.ryanmiles.dailyenergytracker.data.model.Entry
 import java.util.*
 
 /*
@@ -46,7 +46,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
         //EspressoIdlingResource.increment() // App is busy until further notice
 
         entryRepository.getEntries(object : EntryDataSource.LoadEntriesCallback {
-            override fun onEntriesLoaded(entries: List<DailyEntry>) {
+            override fun onEntriesLoaded(entries: List<Entry>) {
                 //Sort to right date
                 Collections.sort(entries)
 
@@ -69,7 +69,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
         })
     }
 
-    private fun processTasks(entries: List<DailyEntry>) {
+    private fun processTasks(entries: List<Entry>) {
         if (entries.isEmpty()) {
             // Show a message indicating there are no tasks for that filter type.
             entryListView.showNoEntries()
@@ -83,7 +83,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
         entryListView.showAddEntry()
     }
 
-    override fun openEntryDetails(requestEntry: DailyEntry) {
+    override fun openEntryDetails(requestEntry: Entry) {
         entryListView.showEntryDetailsUi(requestEntry.id)
     }
 

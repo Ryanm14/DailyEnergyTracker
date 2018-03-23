@@ -14,7 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
-import me.ryanmiles.dailyenergytracker.data.model.DailyEntry
+import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
 
@@ -23,7 +23,7 @@ import java.util.*
  */
 
 /**
- * Display a list of [DailyEntry]s. Users can view all, edit, and add new new [DailyEntry]s
+ * Display a list of [Entry]s. Users can view all, edit, and add new new [Entry]s
  */
 class EntryListFragment : Fragment(), EntryListContract.View {
 
@@ -43,7 +43,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
      * Listener for clicks on tasks in the ListView.
      */
     private var itemListener: EntryItemListener = object : EntryItemListener {
-        override fun onEntryClick(clickedEntry: DailyEntry) {
+        override fun onEntryClick(clickedEntry: Entry) {
             //presenter.openTaskDetails(clickedTask)
         }
     }
@@ -56,7 +56,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         val root = inflater.inflate(R.layout.fragment_entry_list, container, false)
 
         with(root) {
-            val recyclerView = findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
+            findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = recyclerViewAdapter
             }
@@ -87,7 +87,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         return root
     }
 
-    override fun showEntries(entries: List<DailyEntry>) {
+    override fun showEntries(entries: List<Entry>) {
         recyclerViewAdapter.entries = entries
         entriesView.visibility = View.VISIBLE
         noEntriesView.visibility = View.GONE
@@ -131,7 +131,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
     interface EntryItemListener {
 
-        fun onEntryClick(clickedEntry: DailyEntry)
+        fun onEntryClick(clickedEntry: Entry)
     }
 
     companion object {

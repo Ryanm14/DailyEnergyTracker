@@ -6,21 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.daily_entry_item.view.*
 import me.ryanmiles.dailyenergytracker.R
-import me.ryanmiles.dailyenergytracker.data.model.DailyEntry
+import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.entrylist.EntryListFragment.EntryItemListener
 import java.util.*
 
 /*
   * Created by Ryan Miles on 3/20/2018.
   */
-class EntryListAdapter(entries: List<DailyEntry>, private val itemListener: EntryItemListener)
+class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItemListener)
     : RecyclerView.Adapter<EntryListAdapter.ViewHolder>() {
 
     init {
         setHasStableIds(true)
     }
 
-    var entries: List<DailyEntry> = entries
+    var entries: List<Entry> = entries
         set(entries) {
             field = entries
             notifyDataSetChanged()
@@ -42,7 +42,7 @@ class EntryListAdapter(entries: List<DailyEntry>, private val itemListener: Entr
 
     class ViewHolder(val view: View, private val itemListener: EntryItemListener) : RecyclerView.ViewHolder(view) {
 
-        fun bindEntry(entry: DailyEntry) {
+        fun bindEntry(entry: Entry) {
             itemView.title.text = entry.date
             itemView.setOnClickListener { itemListener.onEntryClick(entry) }
         }
