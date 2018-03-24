@@ -4,6 +4,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
+import java.text.SimpleDateFormat
 import java.util.*
 
 /*
@@ -12,17 +13,24 @@ import java.util.*
 @RealmClass
 open class Entry(
 
-        @PrimaryKey var id: String = UUID.randomUUID().toString(),
-
         var date: String = "",
 
         var note: String = "",
 
-        var hourlyEntries: RealmList<HourlyEntry> = RealmList())
+        var hourlyEntries: RealmList<HourlyEntry> = RealmList(),
+
+        @PrimaryKey var id: String = UUID.randomUUID().toString())
 
     : RealmObject(), Comparable<Entry> {
 
     override fun compareTo(other: Entry): Int {
-        return id.compareTo(other.id)
+        val pattern = "MM/dd/yyyy"
+        val dateFormat = SimpleDateFormat(pattern)
+        val thisDate = dateFormat.parse(date)
+        val otherDate = dateFormat.parse(other.date)
+        return otherDate.compareTo(thisDate)
     }
+
+    val isEmpty
+        get() = date.isEmpty() && note.isEmpty()
 }

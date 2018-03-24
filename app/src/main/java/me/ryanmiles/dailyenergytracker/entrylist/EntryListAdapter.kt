@@ -43,7 +43,7 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
     class ViewHolder(val view: View, private val itemListener: EntryItemListener) : RecyclerView.ViewHolder(view) {
 
         fun bindEntry(entry: Entry) {
-            itemView.title.text = entry.date
+            itemView.title.text = "${entry.date} - ${entry.note}"
             itemView.setOnClickListener { itemListener.onEntryClick(entry) }
         }
     }

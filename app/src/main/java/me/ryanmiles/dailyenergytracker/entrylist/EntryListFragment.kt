@@ -1,5 +1,6 @@
 package me.ryanmiles.dailyenergytracker.entrylist
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -14,6 +15,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
+import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryActivity
+import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryFragment
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
@@ -44,7 +47,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
      */
     private var itemListener: EntryItemListener = object : EntryItemListener {
         override fun onEntryClick(clickedEntry: Entry) {
-            //presenter.openTaskDetails(clickedTask)
+            presenter.openEditEntry(clickedEntry)
         }
     }
 
@@ -79,7 +82,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         activity!!.findViewById<FloatingActionButton>(R.id.fab_add_entry).apply {
             setImageResource(R.drawable.ic_add)
             setOnClickListener {
-                //presenter.addNewTask()
+                presenter.addNewEntry()
             }
         }
 
@@ -111,17 +114,14 @@ class EntryListFragment : Fragment(), EntryListContract.View {
     }
 
     override fun showAddEntry() {
-        // val intent = Intent(context, AddEditTaskActivity::class.java)
-        // startActivityForResult(intent, AddEditTaskActivity.REQUEST_ADD_TASK)
+        val intent = Intent(context, AddEditEntryActivity::class.java)
+        startActivityForResult(intent, AddEditEntryActivity.REQUEST_ADD_ENTRY)
     }
 
-    override fun showEntryDetailsUi(entryId: String) {
-        // in it's own Activity, since it makes more sense that way and it gives us the flexibility
-        // to show some Intent stubbing.
-        //  val intent = Intent(context, TaskDetailActivity::class.java).apply {
-        //     putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskId)
-        //  }
-        // startActivity(intent)
+    override fun showEditEntry(entryId: String) {
+        val intent = Intent(context, AddEditEntryActivity::class.java)
+        intent.putExtra(AddEditEntryFragment.ARGUMENT_EDIT_ENTRY_ID, entryId)
+        startActivityForResult(intent, REQUEST_EDIT_ENTRY)
     }
 
     override fun onResume() {
@@ -135,6 +135,8 @@ class EntryListFragment : Fragment(), EntryListContract.View {
     }
 
     companion object {
+
+        private val REQUEST_EDIT_ENTRY = 1
 
         fun newInstance() = EntryListFragment()
     }
