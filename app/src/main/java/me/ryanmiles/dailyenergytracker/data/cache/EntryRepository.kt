@@ -114,7 +114,7 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
     }
 
     private fun cache(entry: Entry) {
-        val cachedEntry = Entry(entry.id, entry.date, entry.note, entry.hourlyEntries)
+        val cachedEntry = Entry(entry.date, entry.note, entry.hourlyEntries, entry.id)
         cachedEntries[cachedEntry.id] = cachedEntry
     }
 

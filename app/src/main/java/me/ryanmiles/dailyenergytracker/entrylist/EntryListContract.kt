@@ -22,7 +22,7 @@ interface EntryListContract {
 
         fun showAddEntry()
 
-        fun showEntryDetailsUi(entryId: String)
+        fun showEditEntry(entryId: String)
 
         fun showNoEntries()
 
@@ -31,8 +31,11 @@ interface EntryListContract {
 
     /** EntryList implementation of the [BasePresenter] **/
     interface Presenter : BasePresenter {
+
         fun loadEntriesFromStart(forceUpdate: Boolean)
-        fun openEntryDetails(requestEntry: Entry)
+
+        fun openEditEntry(requestEntry: Entry)
+
         fun addNewEntry()
     }
 
