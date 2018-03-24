@@ -1,6 +1,5 @@
 package me.ryanmiles.dailyenergytracker.entrylist
 
-import me.ryanmiles.dailyenergytracker.data.cache.EntryRepository
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import java.util.*
@@ -13,7 +12,7 @@ import java.util.*
  * Listens to user actions from the UI ([EntryListFragment]), retrieves the data and updates the
  * UI as required.
  */
-class EntryListPresenter(val entryRepository: EntryRepository, val entryListView: EntryListContract.View) : EntryListContract.Presenter {
+class EntryListPresenter(val entryRepository: EntryDataSource, val entryListView: EntryListContract.View) : EntryListContract.Presenter {
 
     private var firstLoad = true
 
@@ -56,7 +55,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
                 //if (!EspressoIdlingResource.countingIdlingResource.isIdleNow) {
                 //    EspressoIdlingResource.decrement() // Set app as idle.
                 // }
-                processTasks(entries)
+                processEntries(entries)
             }
 
             override fun onDataNotAvailable() {
@@ -69,7 +68,7 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
         })
     }
 
-    private fun processTasks(entries: List<Entry>) {
+    private fun processEntries(entries: List<Entry>) {
         if (entries.isEmpty()) {
             // Show a message indicating there are no tasks for that filter type.
             entryListView.showNoEntries()
@@ -83,8 +82,8 @@ class EntryListPresenter(val entryRepository: EntryRepository, val entryListView
         entryListView.showAddEntry()
     }
 
-    override fun openEntryDetails(requestEntry: Entry) {
-        entryListView.showEntryDetailsUi(requestEntry.id)
+    override fun openEditEntry(requestEntry: Entry) {
+        entryListView.showEditEntry(requestEntry.id)
     }
 
 }

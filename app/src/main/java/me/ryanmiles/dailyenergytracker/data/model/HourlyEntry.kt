@@ -13,7 +13,7 @@ open class HourlyEntry(
 
         @PrimaryKey var id: String = UUID.randomUUID().toString(),
 
-        var time: Date = Date(),
+        var time: String = "",
 
         var note: String = "",
 

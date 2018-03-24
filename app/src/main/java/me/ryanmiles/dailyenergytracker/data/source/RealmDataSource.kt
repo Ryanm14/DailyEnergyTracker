@@ -2,6 +2,7 @@ package me.ryanmiles.dailyenergytracker.data.source
 
 import android.support.annotation.VisibleForTesting
 import io.realm.Realm
+import io.realm.Sort
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 
@@ -48,7 +49,7 @@ class RealmDataSource : EntryDataSource {
 
 
     override fun getEntries(callback: EntryDataSource.LoadEntriesCallback) {
-        val entries = realm.where(Entry::class.java).findAll()
+        val entries = realm.where(Entry::class.java).sort("date", Sort.DESCENDING).findAll()
         if (entries.isEmpty()) {
             callback.onDataNotAvailable()
         } else {
