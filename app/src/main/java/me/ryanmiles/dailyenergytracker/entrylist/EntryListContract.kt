@@ -2,7 +2,7 @@ package me.ryanmiles.dailyenergytracker.entrylist
 
 import me.ryanmiles.dailyenergytracker.BasePresenter
 import me.ryanmiles.dailyenergytracker.BaseView
-import me.ryanmiles.dailyenergytracker.data.model.DailyEntry
+import me.ryanmiles.dailyenergytracker.data.model.Entry
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -18,7 +18,7 @@ interface EntryListContract {
 
         var isActive: Boolean
 
-        fun showEntries(entries: List<DailyEntry>)
+        fun showEntries(entries: List<Entry>)
 
         fun showAddEntry()
 
@@ -32,7 +32,7 @@ interface EntryListContract {
     /** EntryList implementation of the [BasePresenter] **/
     interface Presenter : BasePresenter {
         fun loadEntriesFromStart(forceUpdate: Boolean)
-        fun openEntryDetails(requestEntry: DailyEntry)
+        fun openEntryDetails(requestEntry: Entry)
         fun addNewEntry()
     }
 

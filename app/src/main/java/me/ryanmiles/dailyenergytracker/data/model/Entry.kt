@@ -1,5 +1,6 @@
 package me.ryanmiles.dailyenergytracker.data.model
 
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -13,15 +14,15 @@ open class Entry(
 
         @PrimaryKey var id: String = UUID.randomUUID().toString(),
 
-        var time: Date = Date(),
+        var date: String = "",
 
         var note: String = "",
 
-        var energyNumber: Int = 0)
+        var hourlyEntries: RealmList<HourlyEntry> = RealmList())
 
     : RealmObject(), Comparable<Entry> {
 
     override fun compareTo(other: Entry): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return id.compareTo(other.id)
     }
 }
