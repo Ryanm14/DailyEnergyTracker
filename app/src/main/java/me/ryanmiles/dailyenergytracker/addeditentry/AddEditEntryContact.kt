@@ -24,6 +24,8 @@ interface AddEditEntryContact {
         fun setNote(note: String)
 
         fun showEntryDeleted()
+
+        fun setToCurrentDate()
     }
 
     interface Presenter : BasePresenter {
