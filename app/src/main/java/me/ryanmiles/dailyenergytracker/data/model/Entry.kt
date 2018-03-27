@@ -32,5 +32,9 @@ open class Entry(
     }
 
     val isEmpty
-        get() = date.isEmpty() && note.isEmpty()
+        get() = date.isEmpty()
+
+    fun addHourlyEntry(hourlyEntry: HourlyEntry) {
+        hourlyEntries.add(hourlyEntry)
+    }
 }
