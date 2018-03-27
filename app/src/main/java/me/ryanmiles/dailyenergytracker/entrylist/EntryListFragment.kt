@@ -7,12 +7,14 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.h6ah4i.android.widget.advrecyclerview.expandable.RecyclerViewExpandableItemManager
 import kotlinx.android.synthetic.main.fragment_entry_list.*
 import me.ryanmiles.dailyenergytracker.R
 import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryActivity
@@ -20,6 +22,7 @@ import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryFragment
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
+
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -60,8 +63,11 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
         with(root) {
             findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
+                val expMgr = RecyclerViewExpandableItemManager(null)
                 layoutManager = LinearLayoutManager(context)
-                adapter = recyclerViewAdapter
+                adapter = expMgr.createWrappedAdapter(recyclerViewAdapter)
+                (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                expMgr.attachRecyclerView(this)
             }
 
             entriesLabelView = findViewById(R.id.entriesLabel)
