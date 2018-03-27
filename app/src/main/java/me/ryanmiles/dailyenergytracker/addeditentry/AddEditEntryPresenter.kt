@@ -33,6 +33,8 @@ class AddEditEntryPresenter(private val entryId: String?,
     override fun start() {
         if (entryId != null && isDataMissing) {
             populateEntry()
+        } else {
+            addEntryView.setToCurrentDate()
         }
     }
 

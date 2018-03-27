@@ -98,6 +98,12 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
         this.date.text = date
     }
 
+    override fun setToCurrentDate() {
+        val myFormat = "MM/dd/yy" //In which you need put here
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        setDate(sdf.format(Date()))
+    }
+
     override fun setNote(note: String) {
         this.note.text = note
     }
