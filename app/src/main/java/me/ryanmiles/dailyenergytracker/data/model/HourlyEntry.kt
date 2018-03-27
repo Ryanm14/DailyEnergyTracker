@@ -11,17 +11,20 @@ import java.util.*
 @RealmClass
 open class HourlyEntry(
 
-        @PrimaryKey var id: String = UUID.randomUUID().toString(),
-
         var time: String = "",
 
         var note: String = "",
 
-        var energyNumber: Int = 0)
+        var energyNumber: Int = -1,
+
+        @PrimaryKey var id: String = UUID.randomUUID().toString())
 
     : RealmObject(), Comparable<HourlyEntry> {
 
     override fun compareTo(other: HourlyEntry): Int {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    val isEmpty
+        get() = time.isEmpty() || energyNumber == -1
 }
