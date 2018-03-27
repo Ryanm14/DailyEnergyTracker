@@ -17,7 +17,7 @@ class RealmDataSource : EntryDataSource {
     //TODO Make sure saving does work Realm only manages the returned realmEntry
     override fun saveEntry(entry: Entry): Entry {
         realm.beginTransaction()
-        val realmEntry = realm.copyToRealm(entry)
+        val realmEntry = realm.copyToRealmOrUpdate(entry)
         realm.commitTransaction()
         return realmEntry
     }
