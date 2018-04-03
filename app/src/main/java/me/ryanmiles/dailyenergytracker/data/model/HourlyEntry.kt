@@ -3,6 +3,7 @@ package me.ryanmiles.dailyenergytracker.data.model
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
+import java.text.SimpleDateFormat
 import java.util.*
 
 /*
@@ -22,7 +23,11 @@ open class HourlyEntry(
     : RealmObject(), Comparable<HourlyEntry> {
 
     override fun compareTo(other: HourlyEntry): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val pattern = "h:mm a"
+        val dateFormat = SimpleDateFormat(pattern, Locale.US)
+        val thisTime = dateFormat.parse(time)
+        val otherTime = dateFormat.parse(other.time)
+        return thisTime.compareTo(otherTime)
     }
 
     val isEmpty
