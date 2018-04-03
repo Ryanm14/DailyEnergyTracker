@@ -13,7 +13,7 @@ import java.util.*
  * Listens to user actions from the UI ([EntryListFragment]), retrieves the data and updates the
  * UI as required.
  */
-class EntryListPresenter(val entryRepository: EntryDataSource, val entryListView: EntryListContract.View) : EntryListContract.Presenter {
+class EntryListPresenter(private val entryRepository: EntryDataSource, val entryListView: EntryListContract.View) : EntryListContract.Presenter {
 
     private var firstLoad = true
 
@@ -32,9 +32,7 @@ class EntryListPresenter(val entryRepository: EntryDataSource, val entryListView
     }
 
     /**
-     * @param forceUpdate   Pass in true to refresh the data in the [TasksDataSource]
-     * *
-     * @param showLoadingUI Pass in true to display a loading icon in the UI
+     * @param forceUpdate   Pass in true to refresh the data in the [EntryDataSource]
      */
     private fun loadEntries(forceUpdate: Boolean) {
         if (forceUpdate) {

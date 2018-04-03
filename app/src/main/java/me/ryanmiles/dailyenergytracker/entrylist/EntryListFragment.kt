@@ -144,7 +144,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
     companion object {
 
-        private val REQUEST_EDIT_ENTRY = 1
+        private const val REQUEST_EDIT_ENTRY = 1
 
         fun newInstance() = EntryListFragment()
     }
