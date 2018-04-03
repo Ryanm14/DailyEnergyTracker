@@ -14,6 +14,7 @@ import kotlin.collections.LinkedHashMap
 class EntryRepository(private val realmDataSource: EntryDataSource) : EntryDataSource {
 
     override fun saveEntry(entry: Entry): Entry {
+        entry.hourlyEntries.toMutableList().sort()
         val realmEntry = realmDataSource.saveEntry(entry)
         cache(realmEntry)
         return realmEntry
