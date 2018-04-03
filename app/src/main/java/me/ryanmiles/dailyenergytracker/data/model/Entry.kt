@@ -37,4 +37,13 @@ open class Entry(
     fun addHourlyEntry(hourlyEntry: HourlyEntry) {
         hourlyEntries.add(hourlyEntry)
     }
+
+    fun getHourlyEntry(hourlyId: String?): HourlyEntry {
+        for (hourlyEntry in hourlyEntries) {
+            if (hourlyEntry.id == hourlyId) {
+                return hourlyEntry
+            }
+        }
+        return HourlyEntry()
+    }
 }

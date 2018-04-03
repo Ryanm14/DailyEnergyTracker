@@ -20,6 +20,7 @@ import me.ryanmiles.dailyenergytracker.R
 import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryActivity
 import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryFragment
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
 
@@ -49,8 +50,8 @@ class EntryListFragment : Fragment(), EntryListContract.View {
      * Listener for clicks on tasks in the ListView.
      */
     private var itemListener: EntryItemListener = object : EntryItemListener {
-        override fun onEntryClick(clickedEntry: Entry) {
-            presenter.openEditEntry(clickedEntry)
+        override fun onEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry) {
+            presenter.openEditEntry(clickedEntry, clickedHourlyEntry)
         }
     }
 
@@ -124,9 +125,10 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         startActivityForResult(intent, AddEditEntryActivity.REQUEST_ADD_ENTRY)
     }
 
-    override fun showEditEntry(entryId: String) {
+    override fun showEditEntry(entryId: String, hourlyId: String) {
         val intent = Intent(context, AddEditEntryActivity::class.java)
         intent.putExtra(AddEditEntryFragment.ARGUMENT_EDIT_ENTRY_ID, entryId)
+        intent.putExtra(AddEditEntryFragment.ARGUMENT_EDIT_HOURLY_ENTRY_ID, hourlyId)
         startActivityForResult(intent, REQUEST_EDIT_ENTRY)
     }
 
@@ -137,7 +139,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
     interface EntryItemListener {
 
-        fun onEntryClick(clickedEntry: Entry)
+        fun onEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry)
     }
 
     companion object {

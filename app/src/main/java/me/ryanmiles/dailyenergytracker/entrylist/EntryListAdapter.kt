@@ -45,12 +45,12 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
 
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.daily_entry_item, parent, false)
-        return EntryViewHolder(view, itemListener)
+        return EntryViewHolder(view)
     }
 
     override fun onCreateChildViewHolder(parent: ViewGroup, viewType: Int): HourlyEntryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.hourly_entry_item, parent, false)
-        return HourlyEntryViewHolder(view)
+        return HourlyEntryViewHolder(view, itemListener)
     }
 
     override fun onBindGroupViewHolder(holder: EntryViewHolder, groupPosition: Int, viewType: Int) {
@@ -58,26 +58,28 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
     }
 
     override fun onBindChildViewHolder(holder: HourlyEntryViewHolder, groupPosition: Int, childPosition: Int, viewType: Int) {
-        holder.bindEntry(entries[groupPosition].hourlyEntries[childPosition])
+        holder.bindEntry(entries[groupPosition], entries[groupPosition].hourlyEntries[childPosition])
     }
 
     override fun onCheckCanExpandOrCollapseGroup(holder: EntryViewHolder?, groupPosition: Int, x: Int, y: Int, expand: Boolean): Boolean {
         return true
     }
 
-    class EntryViewHolder(val view: View, private val itemListener: EntryItemListener) : AbstractExpandableItemViewHolder(view) {
+    class EntryViewHolder(val view: View) : AbstractExpandableItemViewHolder(view) {
 
         fun bindEntry(entry: Entry) {
-            itemView.title.text = "${entry.date} - ${entry.note}"
-            itemView.title.setOnClickListener { itemListener.onEntryClick(entry) }
+            itemView.title.text = "${entry.date} - ${entry.note}  Size: ${entry.hourlyEntries.size}"
         }
     }
 
-    class HourlyEntryViewHolder(val view: View) : AbstractExpandableItemViewHolder(view) {
+    class HourlyEntryViewHolder(val view: View, private val itemListener: EntryItemListener) : AbstractExpandableItemViewHolder(view) {
 
-        fun bindEntry(hourlyEntry: HourlyEntry?) {
+        fun bindEntry(entry: Entry, hourlyEntry: HourlyEntry?) {
             if (hourlyEntry != null) {
                 itemView.hourly_entry_item_time.text = "${hourlyEntry.time} : ${hourlyEntry.energyNumber}"
+                itemView.setOnClickListener {
+                    itemListener.onEntryClick(entry, hourlyEntry)
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package me.ryanmiles.dailyenergytracker.entrylist
 
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 import java.util.*
 
 /*
@@ -82,8 +83,9 @@ class EntryListPresenter(val entryRepository: EntryDataSource, val entryListView
         entryListView.showAddEntry()
     }
 
-    override fun openEditEntry(requestEntry: Entry) {
-        entryListView.showEditEntry(requestEntry.id)
+    override fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry) {
+        entryListView.showEditEntry(requestEntry.id, requestHourlyEntry.id)
     }
+
 
 }
