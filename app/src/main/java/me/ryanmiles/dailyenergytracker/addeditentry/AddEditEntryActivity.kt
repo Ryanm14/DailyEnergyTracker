@@ -16,16 +16,18 @@ class AddEditEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addentry_activity)
 
-        val taskId = intent.getStringExtra(AddEditEntryFragment.ARGUMENT_EDIT_ENTRY_ID)
+        val entryId = intent.getStringExtra(AddEditEntryFragment.ARGUMENT_EDIT_ENTRY_ID)
+        val hourlyEntryId = intent.getStringExtra(AddEditEntryFragment.ARGUMENT_EDIT_HOURLY_ENTRY_ID)
+
         setupActionBar(R.id.toolbar) {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
-            setTitle(if (taskId == null) R.string.add_entry else R.string.edit_entry)
+            setTitle(if (entryId == null) R.string.add_entry else R.string.edit_entry)
         }
 
         val addEditEntryFragment =
                 supportFragmentManager.findFragmentById(R.id.contentFrame) as AddEditEntryFragment?
-                        ?: AddEditEntryFragment.newInstance(taskId).also {
+                        ?: AddEditEntryFragment.newInstance(entryId).also {
                             replaceFragmentInActivity(it, R.id.contentFrame)
                         }
 
@@ -36,7 +38,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
 
         // Create the presenter
-        addEditEntryPresenter = AddEditEntryPresenter(taskId,
+        addEditEntryPresenter = AddEditEntryPresenter(entryId, hourlyEntryId,
                 EntryRepository.getInstance(
                         RealmDataSource.getInstance()), addEditEntryFragment,
                 shouldLoadDataFromRepo)

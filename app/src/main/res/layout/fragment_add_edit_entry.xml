@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,15 +19,43 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:hint="@string/date_hint"
+            android:inputType="date"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <EditText
             android:id="@+id/add_entry_note"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="50dp"
+            android:hint="@string/note_hint"
             android:gravity="top"
-            android:hint="@string/note_hint" />
+            android:inputType="text"/>
+
+        <EditText
+            android:id="@+id/add_entry_hour_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:focusable="false"
+            android:hint="@string/time"
+            android:inputType="datetime"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/add_entry_energy_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsb_max="10"
+            app:dsb_min="0"/>
+
+        <EditText
+            android:id="@+id/add_entry_hour_note"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="top"
+            android:hint="@string/enter_any_time_notes_here"
+            android:inputType="text"/>
 
     </LinearLayout>
 </ScrollView>

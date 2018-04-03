@@ -13,8 +13,10 @@
     <string name="title_activity_add_edit_entry">AddEditEntryActivity</string>
     <string name="add_entry">New Entry</string>
     <string name="edit_entry">Edit Entry</string>
-    <string name="date_hint">Date</string>
+    <string name="date_hint">Select Date</string>
     <string name="note_hint">Enter any notes here</string>
     <string name="empty_task_message">Entries can\'t be empty!</string>
     <string name="menu_delete_task">Delete Entry</string>
+    <string name="time">Select the time</string>
+    <string name="enter_any_time_notes_here">Enter any time notes here</string>
 </resources>

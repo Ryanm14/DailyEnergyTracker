@@ -21,20 +21,33 @@ interface AddEditEntryContact {
 
         fun setDate(date: String)
 
-        fun setNote(note: String)
+        fun setDateNote(note: String)
+
+        fun setTime(time: String)
+
+        fun setHourlyNote(hourlyNote: String)
 
         fun showEntryDeleted()
 
         fun setToCurrentDate()
+
+        fun setToCurrentTime()
+
+        fun setEnergyLevel(energyNumber: Int)
+
     }
 
     interface Presenter : BasePresenter {
         var isDataMissing: Boolean
 
-        fun saveEntry(date: String, note: String)
+        fun saveEntry(date: String, note: String, time: String, hourlyNote: String, energyNumber: Int)
 
         fun populateEntry()
 
+        fun populateHourlyEntry()
+
         fun deleteEntry()
+
+        fun deleteHourlyEntry()
     }
 }

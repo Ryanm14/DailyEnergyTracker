@@ -3,8 +3,10 @@ package me.ryanmiles.dailyenergytracker.data.cache
 import android.util.Log
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 import me.ryanmiles.dailyenergytracker.data.source.RealmDataSource
 import java.util.*
+import kotlin.collections.LinkedHashMap
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -17,9 +19,20 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
         return realmEntry
     }
 
+    override fun saveHourlyEntry(newHourlyEntry: HourlyEntry): HourlyEntry {
+        val realmHourlyEntry = realmDataSource.saveHourlyEntry(newHourlyEntry)
+        cache(realmHourlyEntry)
+        return realmHourlyEntry
+    }
+
     override fun deleteAllEntries() {
         realmDataSource.deleteAllEntries()
         cachedEntries.clear()
+    }
+
+    override fun deleteHourlyEntry(hourlyEntryId: String) {
+        realmDataSource.deleteHourlyEntry(hourlyEntryId)
+        cachedHourlyEntries.remove(hourlyEntryId)
     }
 
     override fun deleteEntry(entryId: String) {
@@ -58,12 +71,38 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
         })
     }
 
+    override fun getHourlyEntry(hourlyId: String, callback: EntryDataSource.GetHourlyEntryCallback) {
+        val hourlyEntryInCache = getHourlyEntryWithId(hourlyId)
+
+        if (hourlyEntryInCache != null) {
+            callback.onHourlyEntryLoaded(hourlyEntryInCache)
+            return
+        }
+
+        realmDataSource.getHourlyEntry(hourlyId, object : EntryDataSource.GetHourlyEntryCallback {
+            override fun onHourlyEntryLoaded(hourlyEntry: HourlyEntry) {
+                // Do in memory cache update to keep the app UI up to date
+                cache(hourlyEntry)
+                callback.onHourlyEntryLoaded(hourlyEntry)
+
+            }
+
+            override fun onDataNotAvailable() {
+                callback.onDataNotAvailable()
+            }
+        })
+    }
+
+    private fun getHourlyEntryWithId(hourlyId: String) = cachedHourlyEntries[hourlyId]
+
     private fun getEntryWithId(entryId: String) = cachedEntries[entryId]
 
     /**
      * This variable has public visibility so it can be accessed from tests.
      */
     var cachedEntries: LinkedHashMap<String, Entry> = LinkedHashMap()
+
+    var cachedHourlyEntries: LinkedHashMap<String, HourlyEntry> = LinkedHashMap()
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
@@ -92,7 +131,7 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
             // Query the Realm
             realmDataSource.getEntries(object : EntryDataSource.LoadEntriesCallback {
                 override fun onEntriesLoaded(entries: List<Entry>) {
-                    refreshCache(entries)
+                    refreshEntryCache(entries)
                     callback.onEntriesLoaded(ArrayList(cachedEntries.values))
                 }
 
@@ -104,7 +143,7 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
 
     }
 
-    private fun refreshCache(entries: List<Entry>) {
+    private fun refreshEntryCache(entries: List<Entry>) {
         cachedEntries.clear()
         entries.forEach {
             cache(it)
@@ -114,8 +153,11 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
     }
 
     private fun cache(entry: Entry) {
-        val cachedEntry = Entry(entry.date, entry.note, entry.hourlyEntries, entry.id)
-        cachedEntries[cachedEntry.id] = cachedEntry
+        cachedEntries[entry.id] = entry
+    }
+
+    private fun cache(hourlyEntry: HourlyEntry) {
+        cachedHourlyEntries[hourlyEntry.id] = hourlyEntry
     }
 
     companion object {
