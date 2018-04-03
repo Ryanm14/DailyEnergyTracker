@@ -7,9 +7,6 @@
     <string name="no_entries_icon">No entries icon</string>
     <string name="loading_entries_error">Error Loading Entries</string>
     <string name="entries">Entries:</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_add_edit_entry">AddEditEntryActivity</string>
     <string name="add_entry">New Entry</string>
     <string name="edit_entry">Edit Entry</string>

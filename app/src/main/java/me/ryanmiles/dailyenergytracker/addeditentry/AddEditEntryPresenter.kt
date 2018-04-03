@@ -23,7 +23,7 @@ import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 
 class AddEditEntryPresenter(private val entryId: String?,
                             private val hourlyId: String?,
-                            val entryRepository: EntryDataSource,
+                            private val entryRepository: EntryDataSource,
                             val addEntryView: AddEditEntryContact.View,
                             override var isDataMissing: Boolean) : AddEditEntryContact.Presenter,
         EntryDataSource.GetEntryCallback, EntryDataSource.GetHourlyEntryCallback {

@@ -11,7 +11,7 @@ import kotlin.collections.LinkedHashMap
 /*
  * Created by Ryan Miles on 3/20/2018.
  */
-class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
+class EntryRepository(private val realmDataSource: EntryDataSource) : EntryDataSource {
 
     override fun saveEntry(entry: Entry): Entry {
         val realmEntry = realmDataSource.saveEntry(entry)
@@ -19,8 +19,8 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
         return realmEntry
     }
 
-    override fun saveHourlyEntry(newHourlyEntry: HourlyEntry): HourlyEntry {
-        val realmHourlyEntry = realmDataSource.saveHourlyEntry(newHourlyEntry)
+    override fun saveHourlyEntry(hourlyEntry: HourlyEntry): HourlyEntry {
+        val realmHourlyEntry = realmDataSource.saveHourlyEntry(hourlyEntry)
         cache(realmHourlyEntry)
         return realmHourlyEntry
     }
@@ -100,15 +100,15 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
     /**
      * This variable has public visibility so it can be accessed from tests.
      */
-    var cachedEntries: LinkedHashMap<String, Entry> = LinkedHashMap()
+    private var cachedEntries: LinkedHashMap<String, Entry> = LinkedHashMap()
 
-    var cachedHourlyEntries: LinkedHashMap<String, HourlyEntry> = LinkedHashMap()
+    private var cachedHourlyEntries: LinkedHashMap<String, HourlyEntry> = LinkedHashMap()
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
      * has package local visibility so it can be accessed from tests.
      */
-    var cacheIsDirty = false
+    private var cacheIsDirty = false
 
     override fun refreshEntries() {
         cacheIsDirty = true
@@ -119,7 +119,7 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
      * available first.
      *
      *
-     * Note: [EntryDataSource.LoadEntriesCallBack.onDataNotAvailable] is fired if all data sources fail to
+     * Note: [EntryDataSource.LoadEntriesCallback.onDataNotAvailable] is fired if all data sources fail to
      * get the data.
      */
     override fun getEntries(callback: EntryDataSource.LoadEntriesCallback) {
@@ -173,10 +173,10 @@ class EntryRepository(val realmDataSource: EntryDataSource) : EntryDataSource {
          */
         @JvmStatic
         fun getInstance(realmDataSource: RealmDataSource): EntryRepository {
-            if (INSTANCE == null) {
-                return EntryRepository(realmDataSource).apply { INSTANCE = this }
+            return if (INSTANCE == null) {
+                EntryRepository(realmDataSource).apply { INSTANCE = this }
             } else {
-                return INSTANCE!!
+                INSTANCE!!
             }
         }
 

@@ -25,7 +25,7 @@ open class Entry(
 
     override fun compareTo(other: Entry): Int {
         val pattern = "MM/dd/yyyy"
-        val dateFormat = SimpleDateFormat(pattern)
+        val dateFormat = SimpleDateFormat(pattern, Locale.US)
         val thisDate = dateFormat.parse(date)
         val otherDate = dateFormat.parse(other.date)
         return otherDate.compareTo(thisDate)
@@ -36,14 +36,5 @@ open class Entry(
 
     fun addHourlyEntry(hourlyEntry: HourlyEntry) {
         hourlyEntries.add(hourlyEntry)
-    }
-
-    fun getHourlyEntry(hourlyId: String?): HourlyEntry {
-        for (hourlyEntry in hourlyEntries) {
-            if (hourlyEntry.id == hourlyId) {
-                return hourlyEntry
-            }
-        }
-        return HourlyEntry()
     }
 }

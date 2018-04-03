@@ -4,7 +4,8 @@
 
     <application
         android:name=".DailyEnergyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,7 +24,7 @@
         <activity
             android:name=".addeditentry.AddEditEntryActivity"
             android:label="@string/title_activity_add_edit_entry"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
