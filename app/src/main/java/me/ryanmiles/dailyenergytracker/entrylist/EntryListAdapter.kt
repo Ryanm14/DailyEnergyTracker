@@ -45,7 +45,7 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
 
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.daily_entry_item, parent, false)
-        return EntryViewHolder(view)
+        return EntryViewHolder(view, itemListener)
     }
 
     override fun onCreateChildViewHolder(parent: ViewGroup, viewType: Int): HourlyEntryViewHolder {
@@ -65,10 +65,13 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
         return true
     }
 
-    class EntryViewHolder(val view: View) : AbstractExpandableItemViewHolder(view) {
+    class EntryViewHolder(val view: View, private val itemListener: EntryItemListener) : AbstractExpandableItemViewHolder(view) {
 
         fun bindEntry(entry: Entry) {
             itemView.title.text = "${entry.date} - ${entry.note}  Size: ${entry.hourlyEntries.size}"
+            itemView.add_hourly_entry_item_button.setOnClickListener {
+                itemListener.onHourlyEntryAddClick(entry)
+            }
         }
     }
 
@@ -78,7 +81,7 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
             if (hourlyEntry != null) {
                 itemView.hourly_entry_item_time.text = "${hourlyEntry.time} : ${hourlyEntry.energyNumber}"
                 itemView.setOnClickListener {
-                    itemListener.onEntryClick(entry, hourlyEntry)
+                    itemListener.onHourlyEntryClick(entry, hourlyEntry)
                 }
             }
         }

@@ -53,13 +53,27 @@ class AddEditEntryPresenter(private val entryId: String?,
             entryRepository.getEntry(entryId, object : EntryDataSource.GetEntryCallback {
                 override fun onEntryLoaded(entry: Entry) {
                     updateEntry(date, note, entry.hourlyEntries)
-                    updateHourlyEntry(time, hourlyNote, energyNumber)
+                    if (hourlyId != null) {
+                        updateHourlyEntry(time, hourlyNote, energyNumber)
+                    } else {
+                        createHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
+                    }
                 }
 
                 override fun onDataNotAvailable() {
                     addEntryView.showEmptyEntryError()
                 }
             })
+        }
+    }
+
+    private fun createHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, time: String, hourlyNote: String, energyNumber: Int) {
+        val newHourlyEntry = HourlyEntry(time, hourlyNote, energyNumber)
+        if (newHourlyEntry.isEmpty) {
+            addEntryView.showEmptyEntryError()
+        } else {
+            entryRepository.saveNewHourlyEntry(hourlyEntries, newHourlyEntry)
+            addEntryView.showEntriesList()
         }
     }
 
