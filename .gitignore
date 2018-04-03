@@ -37,8 +37,6 @@ captures/
 # Intellij
 *.iml
 .idea/
-.idea/workspace.xml
-.idea/libraries
 
 # Keystore files
 *.jks
@@ -94,3 +92,6 @@ hs_err_pid*
 !gradle/wrapper/*
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+
+# Current Work
+Current Work

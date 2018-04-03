@@ -3,6 +3,7 @@ package me.ryanmiles.dailyenergytracker.addeditentry
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -11,6 +12,8 @@ import android.view.*
 import android.widget.TextView
 import me.ryanmiles.dailyenergytracker.R
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+import org.jetbrains.anko.find
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +29,9 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
 
     private lateinit var date: TextView
     private lateinit var note: TextView
+    private lateinit var time: TextView
+    private lateinit var hourlyNote: TextView
+    private lateinit var energyBar: DiscreteSeekBar
 
     override fun onResume() {
         super.onResume()
@@ -37,8 +43,11 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.fragment_add_edit_entry, container, false)
         with(root) {
-            date = findViewById(R.id.add_entry_date)
-            note = findViewById(R.id.add_entry_note)
+            date = find(R.id.add_entry_date)
+            note = find(R.id.add_entry_note)
+            time = find(R.id.add_entry_hour_time)
+            hourlyNote = find(R.id.add_entry_hour_note)
+            energyBar = find(R.id.add_entry_energy_bar)
 
             date.setOnClickListener {
                 val myCalendar = Calendar.getInstance()
@@ -48,7 +57,7 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
 
-                    val myFormat = "MM/dd/yy" //In which you need put here
+                    val myFormat = "MM/dd/yy"
                     val sdf = SimpleDateFormat(myFormat, Locale.US)
 
                     setDate(sdf.format(myCalendar.time))
@@ -57,6 +66,21 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
                 DatePickerDialog(context, dateCall, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+            }
+
+            time.setOnClickListener {
+                val mCurrentTime = Calendar.getInstance()
+                val hour = mCurrentTime.get(Calendar.HOUR_OF_DAY)
+                val minute = mCurrentTime.get(Calendar.MINUTE)
+
+                val mTimePicker: TimePickerDialog
+                mTimePicker = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                    val isPM = selectedHour >= 12
+                    setTime(String.format("%02d:%02d %s", if (selectedHour == 12 || selectedHour == 0) 12 else selectedHour % 12, selectedMinute, if (isPM) "PM" else "AM"))
+                }, hour, minute, false)
+
+                mTimePicker.setTitle("Select Time")
+                mTimePicker.show()
             }
         }
         setHasOptionsMenu(true)
@@ -78,7 +102,8 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
         with(activity!!.findViewById<FloatingActionButton>(R.id.fab_edit_entry_done)) {
             setImageResource(R.drawable.ic_done)
             setOnClickListener {
-                presenter.saveEntry(date.text.toString(), note.text.toString())
+                presenter.saveEntry(date.text.toString(), note.text.toString(), time.text.toString(),
+                        hourlyNote.text.toString(), energyBar.progress)
             }
         }
     }
@@ -101,11 +126,29 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
     override fun setToCurrentDate() {
         val myFormat = "MM/dd/yy" //In which you need put here
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        setDate(sdf.format(Date()))
+        setDate(sdf.format(Calendar.getInstance().time))
     }
 
-    override fun setNote(note: String) {
+    override fun setToCurrentTime() {
+        val df = SimpleDateFormat("h:mm a", Locale.US)
+        val time = df.format(Calendar.getInstance().time)
+        setTime(time)
+    }
+
+    override fun setDateNote(note: String) {
         this.note.text = note
+    }
+
+    override fun setHourlyNote(note: String) {
+        this.hourlyNote.text = note
+    }
+
+    override fun setTime(time: String) {
+        this.time.text = time
+    }
+
+    override fun setEnergyLevel(energyNumber: Int) {
+        this.energyBar.progress = energyNumber
     }
 
     override fun showEntryDeleted() {
@@ -114,6 +157,7 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
 
     companion object {
         const val ARGUMENT_EDIT_ENTRY_ID = "EDIT_ENTRY_ID"
+        const val ARGUMENT_EDIT_HOURLY_ENTRY_ID = "EDIT_HOURLY_ENTRY_ID"
 
         fun newInstance(taskId: String?) =
                 AddEditEntryFragment().apply {

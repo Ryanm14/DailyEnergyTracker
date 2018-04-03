@@ -3,6 +3,7 @@ package me.ryanmiles.dailyenergytracker.entrylist
 import me.ryanmiles.dailyenergytracker.BasePresenter
 import me.ryanmiles.dailyenergytracker.BaseView
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -22,7 +23,7 @@ interface EntryListContract {
 
         fun showAddEntry()
 
-        fun showEditEntry(entryId: String)
+        fun showEditEntry(entryId: String, hourlyId: String)
 
         fun showNoEntries()
 
@@ -34,7 +35,7 @@ interface EntryListContract {
 
         fun loadEntriesFromStart(forceUpdate: Boolean)
 
-        fun openEditEntry(requestEntry: Entry)
+        fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry)
 
         fun addNewEntry()
     }

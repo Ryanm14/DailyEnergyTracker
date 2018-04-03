@@ -5,6 +5,9 @@ import io.realm.Realm
 import io.realm.Sort
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
+
+
 
 /*
  * Created by Ryan Miles on 3/20/2018.
@@ -20,6 +23,13 @@ class RealmDataSource : EntryDataSource {
         val realmEntry = realm.copyToRealmOrUpdate(entry)
         realm.commitTransaction()
         return realmEntry
+    }
+
+    override fun saveHourlyEntry(hourlyEntry: HourlyEntry): HourlyEntry {
+        realm.beginTransaction()
+        val realmHourlyEntry = realm.copyToRealmOrUpdate(hourlyEntry)
+        realm.commitTransaction()
+        return realmHourlyEntry
     }
 
     override fun refreshEntries() {
@@ -38,14 +48,16 @@ class RealmDataSource : EntryDataSource {
 
     override fun deleteEntry(entryId: String) {
         realm.executeTransaction {
-            val entry = realm.where(Entry::class.java).equalTo("id", entryId).findAll()
-            if (entry.isNotEmpty()) {
-                entry.deleteFirstFromRealm()
-            }
+            realm.where(Entry::class.java).equalTo("id", entryId).findFirst()?.deleteFromRealm()
         }
 
     }
 
+    override fun deleteHourlyEntry(hourlyEntryId: String) {
+        realm.executeTransaction {
+            realm.where(HourlyEntry::class.java).equalTo("id", hourlyEntryId).findFirst()?.deleteFromRealm()
+        }
+    }
 
 
     override fun getEntries(callback: EntryDataSource.LoadEntriesCallback) {
@@ -58,11 +70,20 @@ class RealmDataSource : EntryDataSource {
     }
 
     override fun getEntry(entryId: String, callback: EntryDataSource.GetEntryCallback) {
-        val entry = realm.where(Entry::class.java).equalTo("id", entryId).findAll()
-        if (entry.isEmpty()) {
+        val entry = realm.where(Entry::class.java).equalTo("id", entryId).findFirst()
+        if (entry == null) {
             callback.onDataNotAvailable()
         } else {
-            callback.onEntryLoaded(entry.first()!!)
+            callback.onEntryLoaded(entry)
+        }
+    }
+
+    override fun getHourlyEntry(hourlyId: String, callback: EntryDataSource.GetHourlyEntryCallback) {
+        val hourlyEntry = realm.where(HourlyEntry::class.java).equalTo("id", hourlyId).findFirst()
+        if (hourlyEntry == null) {
+            callback.onDataNotAvailable()
+        } else {
+            callback.onHourlyEntryLoaded(hourlyEntry)
         }
     }
 

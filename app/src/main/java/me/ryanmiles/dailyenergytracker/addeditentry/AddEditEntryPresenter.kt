@@ -3,6 +3,7 @@ package me.ryanmiles.dailyenergytracker.addeditentry
 import io.realm.RealmList
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
+import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 
 /*
   * Created by Ryan Miles on 3/23/2018.
@@ -21,10 +22,11 @@ import me.ryanmiles.dailyenergytracker.data.model.Entry
  */
 
 class AddEditEntryPresenter(private val entryId: String?,
+                            private val hourlyId: String?,
                             val entryRepository: EntryDataSource,
                             val addEntryView: AddEditEntryContact.View,
                             override var isDataMissing: Boolean) : AddEditEntryContact.Presenter,
-        EntryDataSource.GetEntryCallback {
+        EntryDataSource.GetEntryCallback, EntryDataSource.GetHourlyEntryCallback {
 
     init {
         addEntryView.presenter = this
@@ -36,19 +38,41 @@ class AddEditEntryPresenter(private val entryId: String?,
         } else {
             addEntryView.setToCurrentDate()
         }
+
+        if (hourlyId != null && isDataMissing) {
+            populateHourlyEntry()
+        } else {
+            addEntryView.setToCurrentTime()
+        }
     }
 
-    override fun saveEntry(date: String, note: String) {
+    override fun saveEntry(date: String, note: String, time: String, hourlyNote: String, energyNumber: Int) {
         if (entryId == null) {
-            createEntry(date, note)
+            createEntry(date, note, time, hourlyNote, energyNumber)
         } else {
-            updateEntry(date, note)
+            entryRepository.getEntry(entryId, object : EntryDataSource.GetEntryCallback {
+                override fun onEntryLoaded(entry: Entry) {
+                    updateEntry(date, note, entry.hourlyEntries)
+                    updateHourlyEntry(time, hourlyNote, energyNumber)
+                }
+
+                override fun onDataNotAvailable() {
+                    addEntryView.showEmptyEntryError()
+                }
+            })
         }
+    }
+
+    override fun populateHourlyEntry() {
+        if (hourlyId == null) {
+            throw RuntimeException("populateHourlyEntry() was called but the hourly entry is new")
+        }
+        entryRepository.getHourlyEntry(hourlyId, this)
     }
 
     override fun populateEntry() {
         if (entryId == null) {
-            throw RuntimeException("populateTask() was called but task is new.")
+            throw RuntimeException("populateEntry() was called but the entry is new.")
         }
         entryRepository.getEntry(entryId, this)
     }
@@ -57,7 +81,15 @@ class AddEditEntryPresenter(private val entryId: String?,
         // The view may not be able to handle UI updates anymore
         if (addEntryView.isActive) {
             addEntryView.setDate(entry.date)
-            addEntryView.setNote(entry.note)
+            addEntryView.setDateNote(entry.note)
+        }
+    }
+
+    override fun onHourlyEntryLoaded(hourlyEntry: HourlyEntry) {
+        if (addEntryView.isActive) {
+            addEntryView.setTime(hourlyEntry.time)
+            addEntryView.setHourlyNote(hourlyEntry.note)
+            addEntryView.setEnergyLevel(hourlyEntry.energyNumber)
         }
         isDataMissing = false
     }
@@ -69,14 +101,25 @@ class AddEditEntryPresenter(private val entryId: String?,
         }
     }
 
-    private fun createEntry(date: String, note: String) {
+    private fun createEntry(date: String, note: String, time: String, hourlyNote: String, energyNumber: Int) {
         val newEntry = Entry(date, note)
-        if (newEntry.isEmpty) {
+        val newHourlyEntry = HourlyEntry(time, hourlyNote, energyNumber)
+        newEntry.addHourlyEntry(newHourlyEntry)
+        if (newEntry.isEmpty || newHourlyEntry.isEmpty) {
             addEntryView.showEmptyEntryError()
         } else {
             entryRepository.saveEntry(newEntry)
             addEntryView.showEntriesList()
+
         }
+    }
+
+    private fun updateHourlyEntry(time: String, hourlyNote: String, energyNumber: Int) {
+        if (hourlyId == null || entryId == null) {
+            throw RuntimeException("updateHourlyEntry() was called but the hourlyEntry is new.")
+        }
+        entryRepository.saveHourlyEntry(HourlyEntry(time, hourlyNote, energyNumber, hourlyId))
+        addEntryView.showEntriesList() // After an edit, go back to the list.
     }
 
     override fun deleteEntry() {
@@ -92,11 +135,23 @@ class AddEditEntryPresenter(private val entryId: String?,
         }
     }
 
-    private fun updateEntry(date: String, note: String) {
-        if (entryId == null) {
-            throw RuntimeException("updateTask() was called but task is new.")
+    override fun deleteHourlyEntry() {
+        if (hourlyId == null) {
+            addEntryView.showEntryDeleted()
+        } else {
+            if (hourlyId.isEmpty()) {
+                addEntryView.showEmptyEntryError()
+                return
+            }
+            entryRepository.deleteHourlyEntry(hourlyId)
+            addEntryView.showEntryDeleted()
         }
-        entryRepository.saveEntry(Entry(date, note, RealmList(), entryId))
-        addEntryView.showEntriesList() // After an edit, go back to the list.
+    }
+
+    private fun updateEntry(date: String, note: String, hourlyEntries: RealmList<HourlyEntry>) {
+        if (entryId == null) {
+            throw RuntimeException("updateEntry() was called but the entry is new.")
+        }
+        entryRepository.saveEntry(Entry(date, note, hourlyEntries, entryId))
     }
 }
