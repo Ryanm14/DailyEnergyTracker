@@ -50,8 +50,12 @@ class EntryListFragment : Fragment(), EntryListContract.View {
      * Listener for clicks on tasks in the ListView.
      */
     private var itemListener: EntryItemListener = object : EntryItemListener {
-        override fun onEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry) {
+        override fun onHourlyEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry) {
             presenter.openEditEntry(clickedEntry, clickedHourlyEntry)
+        }
+
+        override fun onHourlyEntryAddClick(clickedEntry: Entry) {
+            presenter.openEditEntry(clickedEntry, null)
         }
     }
 
@@ -125,7 +129,7 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         startActivityForResult(intent, AddEditEntryActivity.REQUEST_ADD_ENTRY)
     }
 
-    override fun showEditEntry(entryId: String, hourlyId: String) {
+    override fun showEditEntry(entryId: String, hourlyId: String?) {
         val intent = Intent(context, AddEditEntryActivity::class.java)
         intent.putExtra(AddEditEntryFragment.ARGUMENT_EDIT_ENTRY_ID, entryId)
         intent.putExtra(AddEditEntryFragment.ARGUMENT_EDIT_HOURLY_ENTRY_ID, hourlyId)
@@ -139,7 +143,9 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
     interface EntryItemListener {
 
-        fun onEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry)
+        fun onHourlyEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry)
+
+        fun onHourlyEntryAddClick(clickedEntry: Entry)
     }
 
     companion object {

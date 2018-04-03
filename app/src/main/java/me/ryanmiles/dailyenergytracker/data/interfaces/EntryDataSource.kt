@@ -1,5 +1,6 @@
 package me.ryanmiles.dailyenergytracker.data.interfaces
 
+import io.realm.RealmList
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 
@@ -46,6 +47,8 @@ interface EntryDataSource {
     fun deleteHourlyEntry(hourlyEntryId: String)
 
     fun getHourlyEntry(hourlyId: String, callback: GetHourlyEntryCallback)
+
+    fun saveNewHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, newHourlyEntry: HourlyEntry)
 
 
 }

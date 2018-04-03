@@ -16,4 +16,5 @@
     <string name="menu_delete_task">Delete Entry</string>
     <string name="time">Select the time</string>
     <string name="enter_any_time_notes_here">Enter any time notes here</string>
+    <string name="addhourlyentry">addHourlyEntry</string>
 </resources>

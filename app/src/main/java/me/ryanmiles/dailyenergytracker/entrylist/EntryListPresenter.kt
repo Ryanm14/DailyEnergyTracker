@@ -81,8 +81,8 @@ class EntryListPresenter(private val entryRepository: EntryDataSource, val entry
         entryListView.showAddEntry()
     }
 
-    override fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry) {
-        entryListView.showEditEntry(requestEntry.id, requestHourlyEntry.id)
+    override fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry?) {
+        entryListView.showEditEntry(requestEntry.id, requestHourlyEntry?.id)
     }
 
 
