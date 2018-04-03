@@ -23,7 +23,7 @@ interface EntryListContract {
 
         fun showAddEntry()
 
-        fun showEditEntry(entryId: String, hourlyId: String)
+        fun showEditEntry(entryId: String, hourlyId: String?)
 
         fun showNoEntries()
 
@@ -35,7 +35,7 @@ interface EntryListContract {
 
         fun loadEntriesFromStart(forceUpdate: Boolean)
 
-        fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry)
+        fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry?)
 
         fun addNewEntry()
     }

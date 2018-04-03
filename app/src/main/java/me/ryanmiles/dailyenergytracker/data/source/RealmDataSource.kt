@@ -2,6 +2,7 @@ package me.ryanmiles.dailyenergytracker.data.source
 
 import android.support.annotation.VisibleForTesting
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.Sort
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
@@ -17,7 +18,6 @@ class RealmDataSource : EntryDataSource {
 
     val realm: Realm = Realm.getDefaultInstance()
 
-    //TODO Make sure saving does work Realm only manages the returned realmEntry
     override fun saveEntry(entry: Entry): Entry {
         realm.beginTransaction()
         val realmEntry = realm.copyToRealmOrUpdate(entry)
@@ -30,6 +30,12 @@ class RealmDataSource : EntryDataSource {
         val realmHourlyEntry = realm.copyToRealmOrUpdate(hourlyEntry)
         realm.commitTransaction()
         return realmHourlyEntry
+    }
+
+    override fun saveNewHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, newHourlyEntry: HourlyEntry) {
+        realm.executeTransaction {
+            hourlyEntries.add(newHourlyEntry)
+        }
     }
 
     override fun refreshEntries() {

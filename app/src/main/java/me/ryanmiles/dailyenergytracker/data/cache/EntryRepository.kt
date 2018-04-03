@@ -1,6 +1,7 @@
 package me.ryanmiles.dailyenergytracker.data.cache
 
 import android.util.Log
+import io.realm.RealmList
 import me.ryanmiles.dailyenergytracker.data.interfaces.EntryDataSource
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
@@ -18,6 +19,10 @@ class EntryRepository(private val realmDataSource: EntryDataSource) : EntryDataS
         val realmEntry = realmDataSource.saveEntry(entry)
         cache(realmEntry)
         return realmEntry
+    }
+
+    override fun saveNewHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, newHourlyEntry: HourlyEntry) {
+        realmDataSource.saveNewHourlyEntry(hourlyEntries, newHourlyEntry)
     }
 
     override fun saveHourlyEntry(hourlyEntry: HourlyEntry): HourlyEntry {
