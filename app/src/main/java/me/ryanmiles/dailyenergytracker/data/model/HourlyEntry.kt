@@ -27,7 +27,7 @@ open class HourlyEntry(
         val dateFormat = SimpleDateFormat(pattern, Locale.US)
         val thisTime = dateFormat.parse(time)
         val otherTime = dateFormat.parse(other.time)
-        return otherTime.compareTo(thisTime)
+        return thisTime.compareTo(otherTime)
     }
 
     val isEmpty
