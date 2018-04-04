@@ -54,7 +54,7 @@ class AddEditEntryPresenter(private val entryId: String?,
                 override fun onEntryLoaded(entry: Entry) {
                     updateEntry(date, note, entry.hourlyEntries)
                     if (hourlyId != null) {
-                        updateHourlyEntry(time, hourlyNote, energyNumber)
+                        updateHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
                     } else {
                         createHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
                     }
@@ -128,11 +128,11 @@ class AddEditEntryPresenter(private val entryId: String?,
         }
     }
 
-    private fun updateHourlyEntry(time: String, hourlyNote: String, energyNumber: Int) {
+    private fun updateHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, time: String, hourlyNote: String, energyNumber: Int) {
         if (hourlyId == null || entryId == null) {
             throw RuntimeException("updateHourlyEntry() was called but the hourlyEntry is new.")
         }
-        entryRepository.saveHourlyEntry(HourlyEntry(time, hourlyNote, energyNumber, hourlyId))
+        entryRepository.saveHourlyEntry(hourlyEntries, HourlyEntry(time, hourlyNote, energyNumber, hourlyId))
         addEntryView.showEntriesList() // After an edit, go back to the list.
     }
 
