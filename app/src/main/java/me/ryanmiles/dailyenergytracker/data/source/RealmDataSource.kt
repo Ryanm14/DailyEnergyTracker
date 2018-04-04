@@ -25,9 +25,10 @@ class RealmDataSource : EntryDataSource {
         return realmEntry
     }
 
-    override fun saveHourlyEntry(hourlyEntry: HourlyEntry): HourlyEntry {
+    override fun saveHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, hourlyEntry: HourlyEntry): HourlyEntry {
         realm.beginTransaction()
         val realmHourlyEntry = realm.copyToRealmOrUpdate(hourlyEntry)
+        hourlyEntries.sort()
         realm.commitTransaction()
         return realmHourlyEntry
     }
@@ -35,6 +36,7 @@ class RealmDataSource : EntryDataSource {
     override fun saveNewHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, newHourlyEntry: HourlyEntry) {
         realm.executeTransaction {
             hourlyEntries.add(newHourlyEntry)
+            hourlyEntries.sort()
         }
     }
 

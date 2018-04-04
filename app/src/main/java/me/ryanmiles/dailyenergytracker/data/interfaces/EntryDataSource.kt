@@ -36,7 +36,7 @@ interface EntryDataSource {
 
     fun saveEntry(entry: Entry): Entry
 
-    fun saveHourlyEntry(hourlyEntry: HourlyEntry): HourlyEntry
+    fun saveHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, hourlyEntry: HourlyEntry): HourlyEntry
 
     fun refreshEntries()
 
