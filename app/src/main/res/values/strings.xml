@@ -17,4 +17,5 @@
     <string name="time">Select the time</string>
     <string name="enter_any_time_notes_here">Enter any time notes here</string>
     <string name="addhourlyentry">addHourlyEntry</string>
+    <string name="graph_day_button">Graph day button</string>
 </resources>

@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
+import android.support.v7.widget.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,9 +55,13 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         override fun onHourlyEntryAddClick(clickedEntry: Entry) {
             presenter.openEditEntry(clickedEntry, null)
         }
+
+        override fun collapseView(position: Int) {
+            expMgr.collapseGroup(position)
+        }
     }
 
-
+    private val expMgr = RecyclerViewExpandableItemManager(null)
     private val recyclerViewAdapter = EntryListAdapter(ArrayList(0), itemListener)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -68,10 +70,11 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
         with(root) {
             findViewById<RecyclerView>(R.id.entries_recycler_view).apply {
-                val expMgr = RecyclerViewExpandableItemManager(null)
                 layoutManager = LinearLayoutManager(context)
                 adapter = expMgr.createWrappedAdapter(recyclerViewAdapter)
                 (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                itemAnimator = DefaultItemAnimator()
+                addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
                 expMgr.attachRecyclerView(this)
             }
 
@@ -146,6 +149,8 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         fun onHourlyEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry)
 
         fun onHourlyEntryAddClick(clickedEntry: Entry)
+
+        fun collapseView(position: Int)
     }
 
     companion object {

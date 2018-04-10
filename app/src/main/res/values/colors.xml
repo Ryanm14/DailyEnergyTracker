@@ -3,5 +3,11 @@
     <color name="colorPrimary">#455A64</color>
     <color name="colorPrimaryDark">#263238</color>
     <color name="colorAccent">#D50000</color>
+    <color name="entry_avg">#3F51B5</color>
+    <color name="entry_count">#673AB7</color>
+    <color name="low_energy">#607D8B</color>
+    <color name="medium_energy">#009688</color>
+    <color name="high_energy">#FF9800</color>
+    <color name="peak_energy">#F44336</color>
 
 </resources>
