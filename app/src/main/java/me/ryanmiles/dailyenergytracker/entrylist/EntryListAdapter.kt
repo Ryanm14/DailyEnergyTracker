@@ -1,5 +1,6 @@
 package me.ryanmiles.dailyenergytracker.entrylist
 
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,7 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
 
     override fun onCreateGroupViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.daily_entry_item, parent, false)
-        return EntryViewHolder(view, itemListener)
+        return EntryViewHolder(entries, view, itemListener)
     }
 
     override fun onCreateChildViewHolder(parent: ViewGroup, viewType: Int): HourlyEntryViewHolder {
@@ -65,12 +66,15 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
         return true
     }
 
-    class EntryViewHolder(val view: View, private val itemListener: EntryItemListener) : AbstractExpandableItemViewHolder(view) {
+    class EntryViewHolder(val entries: List<Entry>, val view: View, private val itemListener: EntryItemListener) : AbstractExpandableItemViewHolder(view) {
 
         fun bindEntry(entry: Entry) {
-            itemView.title.text = "${entry.date} - ${entry.note}  Size: ${entry.hourlyEntries.size}"
+            itemView.title.text = "${entry.date}"
+            itemView.entry_item_count.text = "${entry.hourlyEntries.size} Entries"
+            itemView.entry_item_avg_energy.text = "${entry.getAvgEnergy()} Avg"
             itemView.add_hourly_entry_item_button.setOnClickListener {
                 itemListener.onHourlyEntryAddClick(entry)
+                itemListener.collapseView(entries.indexOf(entry))
             }
         }
     }
@@ -79,7 +83,14 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
 
         fun bindEntry(entry: Entry, hourlyEntry: HourlyEntry?) {
             if (hourlyEntry != null) {
-                itemView.hourly_entry_item_time.text = "${hourlyEntry.time} : ${hourlyEntry.energyNumber}"
+                itemView.hourly_entry_item_time.text = "${hourlyEntry.time}"
+                itemView.hourly_entry_item_energy.text = "${hourlyEntry.energyNumber}"
+                when (hourlyEntry.energyNumber) {
+                    10 -> itemView.hourly_entry_item_energy.setTextColor(ContextCompat.getColor(view.context, R.color.peak_energy))
+                    7, 8, 9 -> itemView.hourly_entry_item_energy.setTextColor(ContextCompat.getColor(view.context, R.color.high_energy))
+                    4, 5, 6 -> itemView.hourly_entry_item_energy.setTextColor(ContextCompat.getColor(view.context, R.color.medium_energy))
+                    0, 1, 2, 3 -> itemView.hourly_entry_item_energy.setTextColor(ContextCompat.getColor(view.context, R.color.low_energy))
+                }
                 itemView.setOnClickListener {
                     itemListener.onHourlyEntryClick(entry, hourlyEntry)
                 }
