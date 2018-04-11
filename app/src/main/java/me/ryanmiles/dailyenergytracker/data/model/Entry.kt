@@ -37,4 +37,8 @@ open class Entry(
     fun addHourlyEntry(hourlyEntry: HourlyEntry) {
         hourlyEntries.add(hourlyEntry)
     }
+
+    fun getAvgEnergy(): Double {
+        return (hourlyEntries.toList().sumByDouble { it.energyNumber.toDouble() } / hourlyEntries.size)
+    }
 }
