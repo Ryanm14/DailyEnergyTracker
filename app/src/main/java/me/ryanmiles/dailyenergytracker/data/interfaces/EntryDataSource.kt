@@ -50,5 +50,7 @@ interface EntryDataSource {
 
     fun saveNewHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, newHourlyEntry: HourlyEntry)
 
+    fun getEntryWithDate(date: String): Entry?
+
 
 }
