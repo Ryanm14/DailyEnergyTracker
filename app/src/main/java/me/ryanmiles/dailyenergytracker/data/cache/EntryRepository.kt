@@ -98,6 +98,11 @@ class EntryRepository(private val realmDataSource: EntryDataSource) : EntryDataS
         })
     }
 
+    override fun getEntryWithDate(date: String): Entry? {
+        return realmDataSource.getEntryWithDate(date)
+
+    }
+
     private fun getHourlyEntryWithId(hourlyId: String) = cachedHourlyEntries[hourlyId]
 
     private fun getEntryWithId(entryId: String) = cachedEntries[entryId]

@@ -9,7 +9,6 @@ import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
 
 
-
 /*
  * Created by Ryan Miles on 3/20/2018.
  */
@@ -84,6 +83,10 @@ class RealmDataSource : EntryDataSource {
         } else {
             callback.onEntryLoaded(entry)
         }
+    }
+
+    override fun getEntryWithDate(date: String): Entry? {
+        return realm.where(Entry::class.java).equalTo("date", date).findFirst()
     }
 
     override fun getHourlyEntry(hourlyId: String, callback: EntryDataSource.GetHourlyEntryCallback) {
