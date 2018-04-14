@@ -47,24 +47,36 @@ class AddEditEntryPresenter(private val entryId: String?,
     }
 
     override fun saveEntry(date: String, note: String, time: String, hourlyNote: String, energyNumber: Int) {
+        val entryFromDate = entryRepository.getEntryWithDate(date)
         if (entryId == null) {
             createEntry(date, note, time, hourlyNote, energyNumber)
         } else {
-            entryRepository.getEntry(entryId, object : EntryDataSource.GetEntryCallback {
-                override fun onEntryLoaded(entry: Entry) {
-                    updateEntry(date, note, entry.hourlyEntries)
-                    if (hourlyId != null) {
-                        updateHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
-                    } else {
-                        createHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
+            if (entryFromDate == null) {
+                entryRepository.getEntry(entryId, object : EntryDataSource.GetEntryCallback {
+                    override fun onEntryLoaded(entry: Entry) {
+                        updateEntry(date, note, entry.hourlyEntries)
+                        if (hourlyId != null) {
+                            updateHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
+                        } else {
+                            createHourlyEntry(entry.hourlyEntries, time, hourlyNote, energyNumber)
+                        }
                     }
-                }
 
-                override fun onDataNotAvailable() {
-                    addEntryView.showEmptyEntryError()
-                }
-            })
+                    override fun onDataNotAvailable() {
+                        addEntryView.showEmptyEntryError()
+                    }
+                })
+            } else {
+                moveHourlyEntry(entryFromDate.hourlyEntries, time, hourlyNote, energyNumber)
+            }
         }
+    }
+
+    private fun moveHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, time: String, hourlyNote: String, energyNumber: Int) {
+        if (hourlyId != null) {
+            entryRepository.deleteHourlyEntry(hourlyId)
+        }
+        createHourlyEntry(hourlyEntries, time, hourlyNote, energyNumber)
     }
 
     private fun createHourlyEntry(hourlyEntries: RealmList<HourlyEntry>, time: String, hourlyNote: String, energyNumber: Int) {
@@ -116,15 +128,20 @@ class AddEditEntryPresenter(private val entryId: String?,
     }
 
     private fun createEntry(date: String, note: String, time: String, hourlyNote: String, energyNumber: Int) {
-        val newEntry = Entry(date, note)
+        val entryFromDate = entryRepository.getEntryWithDate(date)
         val newHourlyEntry = HourlyEntry(time, hourlyNote, energyNumber)
-        newEntry.addHourlyEntry(newHourlyEntry)
-        if (newEntry.isEmpty || newHourlyEntry.isEmpty) {
-            addEntryView.showEmptyEntryError()
+        if (entryFromDate == null) {
+            val newEntry = Entry(date, note)
+            newEntry.addHourlyEntry(newHourlyEntry)
+            if (newEntry.isEmpty || newHourlyEntry.isEmpty) {
+                addEntryView.showEmptyEntryError()
+            } else {
+                entryRepository.saveEntry(newEntry)
+                addEntryView.showEntriesList()
+            }
         } else {
-            entryRepository.saveEntry(newEntry)
+            entryRepository.saveNewHourlyEntry(entryFromDate.hourlyEntries, newHourlyEntry)
             addEntryView.showEntriesList()
-
         }
     }
 
