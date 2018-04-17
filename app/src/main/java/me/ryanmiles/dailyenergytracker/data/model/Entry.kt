@@ -4,6 +4,7 @@ import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,7 +39,11 @@ open class Entry(
         hourlyEntries.add(hourlyEntry)
     }
 
-    fun getAvgEnergy(): Double {
-        return (hourlyEntries.toList().sumByDouble { it.energyNumber.toDouble() } / hourlyEntries.size)
+    fun getAvgEnergy(): Double = if (hourlyEntries.size > 0) {
+        (hourlyEntries.toList().sumByDouble { it.energyNumber.toDouble() } / hourlyEntries.size).roundTo2DecimalPlaces()
+    } else {
+        0.0
     }
+
+    private fun Double.roundTo2DecimalPlaces() = this.toBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
 }

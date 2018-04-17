@@ -49,6 +49,5 @@ interface AddEditEntryContact {
         fun deleteEntry()
 
         fun deleteHourlyEntry()
-
     }
 }

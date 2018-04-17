@@ -50,16 +50,14 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
             energyBar = find(R.id.add_entry_energy_bar)
 
             date.setOnClickListener {
+                val myFormat = "MM/dd/yy"
+                val sdf = SimpleDateFormat(myFormat, Locale.US)
                 val myCalendar = Calendar.getInstance()
+                if (date.text.isNotEmpty()) {
+                    myCalendar.time = sdf.parse(date.text.toString())
+                }
                 val dateCall = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    myCalendar.set(Calendar.YEAR, year)
-                    myCalendar.set(Calendar.MONTH, monthOfYear)
-                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-
-                    val myFormat = "MM/dd/yy"
-                    val sdf = SimpleDateFormat(myFormat, Locale.US)
-
+                    myCalendar.set(year, monthOfYear, dayOfMonth)
                     setDate(sdf.format(myCalendar.time))
                 }
 
@@ -70,14 +68,17 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
 
             time.setOnClickListener {
                 val mCurrentTime = Calendar.getInstance()
-                val hour = mCurrentTime.get(Calendar.HOUR_OF_DAY)
-                val minute = mCurrentTime.get(Calendar.MINUTE)
+                val pattern = "h:mm a"
+                val timeFormat = SimpleDateFormat(pattern, Locale.US)
+                if (time.text.isNotEmpty()) {
+                    mCurrentTime.time = timeFormat.parse(time.text.toString())
+                }
 
                 val mTimePicker: TimePickerDialog
                 mTimePicker = TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                     val isPM = selectedHour >= 12
                     setTime(String.format("%02d:%02d %s", if (selectedHour == 12 || selectedHour == 0) 12 else selectedHour % 12, selectedMinute, if (isPM) "PM" else "AM"))
-                }, hour, minute, false)
+                }, mCurrentTime.get(Calendar.HOUR_OF_DAY), mCurrentTime.get(Calendar.MINUTE), false)
 
                 mTimePicker.setTitle("Select Time")
                 mTimePicker.show()
