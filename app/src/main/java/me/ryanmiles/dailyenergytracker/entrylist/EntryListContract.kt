@@ -28,6 +28,8 @@ interface EntryListContract {
         fun showNoEntries()
 
         fun showLoadingTasksError()
+
+        fun showGraphEntry(id: String)
     }
 
     /** EntryList implementation of the [BasePresenter] **/
@@ -38,6 +40,8 @@ interface EntryListContract {
         fun openEditEntry(requestEntry: Entry, requestHourlyEntry: HourlyEntry?)
 
         fun addNewEntry()
+
+        fun openEntryGraph(clickedEntry: Entry)
     }
 
 

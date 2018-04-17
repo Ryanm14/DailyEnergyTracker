@@ -76,6 +76,10 @@ class EntryListAdapter(entries: List<Entry>, private val itemListener: EntryItem
                 itemListener.onHourlyEntryAddClick(entry)
                 itemListener.collapseView(entries.indexOf(entry))
             }
+            itemView.graph_info_button.setOnClickListener {
+                itemListener.onEntryGraphClick(entry)
+                itemListener.collapseView(entries.indexOf(entry))
+            }
         }
     }
 

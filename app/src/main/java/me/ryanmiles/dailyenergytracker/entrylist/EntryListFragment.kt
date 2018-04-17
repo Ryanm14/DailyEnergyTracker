@@ -19,6 +19,8 @@ import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryActivity
 import me.ryanmiles.dailyenergytracker.addeditentry.AddEditEntryFragment
 import me.ryanmiles.dailyenergytracker.data.model.Entry
 import me.ryanmiles.dailyenergytracker.data.model.HourlyEntry
+import me.ryanmiles.dailyenergytracker.singleentrygraph.SingleEntryGraphActivity
+import me.ryanmiles.dailyenergytracker.singleentrygraph.SingleEntryGraphFragment
 import me.ryanmiles.dailyenergytracker.util.showSnackBar
 import java.util.*
 
@@ -54,6 +56,10 @@ class EntryListFragment : Fragment(), EntryListContract.View {
 
         override fun onHourlyEntryAddClick(clickedEntry: Entry) {
             presenter.openEditEntry(clickedEntry, null)
+        }
+
+        override fun onEntryGraphClick(clickedEntry: Entry) {
+            presenter.openEntryGraph(clickedEntry)
         }
 
         override fun collapseView(position: Int) {
@@ -139,6 +145,12 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         startActivityForResult(intent, REQUEST_EDIT_ENTRY)
     }
 
+    override fun showGraphEntry(entryId: String) {
+        val intent = Intent(context, SingleEntryGraphActivity::class.java)
+        intent.putExtra(SingleEntryGraphFragment.ARGUMENT_GRAPH_ENTRY_ID, entryId)
+        startActivity(intent)
+    }
+
     override fun onResume() {
         super.onResume()
         presenter.start()
@@ -149,6 +161,8 @@ class EntryListFragment : Fragment(), EntryListContract.View {
         fun onHourlyEntryClick(clickedEntry: Entry, clickedHourlyEntry: HourlyEntry)
 
         fun onHourlyEntryAddClick(clickedEntry: Entry)
+
+        fun onEntryGraphClick(clickedEntry: Entry)
 
         fun collapseView(position: Int)
     }

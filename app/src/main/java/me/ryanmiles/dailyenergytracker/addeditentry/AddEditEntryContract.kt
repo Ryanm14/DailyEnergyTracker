@@ -10,7 +10,7 @@ import me.ryanmiles.dailyenergytracker.BaseView
 /**
  * This specifies the contract between the view and the presenter.
  */
-interface AddEditEntryContact {
+interface AddEditEntryContract {
 
     interface View : BaseView<Presenter> {
         var isActive: Boolean
@@ -49,6 +49,5 @@ interface AddEditEntryContact {
         fun deleteEntry()
 
         fun deleteHourlyEntry()
-
     }
 }

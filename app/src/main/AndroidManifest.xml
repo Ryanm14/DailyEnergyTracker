@@ -25,6 +25,10 @@
             android:name=".addeditentry.AddEditEntryActivity"
             android:label="@string/title_activity_add_edit_entry"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".singleentrygraph.SingleEntryGraphActivity"
+            android:label="@string/entry_graph"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

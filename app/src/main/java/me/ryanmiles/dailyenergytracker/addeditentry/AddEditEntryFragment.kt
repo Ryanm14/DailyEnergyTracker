@@ -21,9 +21,9 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  */
-class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
+class AddEditEntryFragment : Fragment(), AddEditEntryContract.View {
 
-    override lateinit var presenter: AddEditEntryContact.Presenter
+    override lateinit var presenter: AddEditEntryContract.Presenter
     override var isActive = false
         get() = isAdded
 
