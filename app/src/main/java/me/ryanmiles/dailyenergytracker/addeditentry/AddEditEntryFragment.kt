@@ -140,8 +140,8 @@ class AddEditEntryFragment : Fragment(), AddEditEntryContact.View {
         this.note.text = note
     }
 
-    override fun setHourlyNote(note: String) {
-        this.hourlyNote.text = note
+    override fun setHourlyNote(hourlyNote: String) {
+        this.hourlyNote.text = hourlyNote
     }
 
     override fun setTime(time: String) {
